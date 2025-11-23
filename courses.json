@@ -1,0 +1,62 @@
+[
+  {
+    "courseId": "C101",
+    "title": "Introduction to Web Development",
+    "instructor": "John Doe",
+    "duration": "10 hours",
+    "rating": 4.5,
+    "category": "Web Development",
+    "price": "$50",
+    "enrolled": 2500
+  },
+  {
+    "courseId": "C102",
+    "title": "Data Science Basics",
+    "instructor": "Priya Sharma",
+    "duration": "15 hours",
+    "rating": 4.7,
+    "category": "Data Science",
+    "price": "$80",
+    "enrolled": 1800
+  },
+  {
+    "courseId": "C103",
+    "title": "UI/UX Design Fundamentals",
+    "instructor": "Miguel Alvarez",
+    "duration": "8 hours",
+    "rating": 4.3,
+    "category": "Design",
+    "price": "$45",
+    "enrolled": 1200
+  },
+  {
+    "courseId": "C104",
+    "title": "Python Programming — Beginner to Intermediate",
+    "instructor": "Aisha Khan",
+    "duration": "20 hours",
+    "rating": 4.8,
+    "category": "Programming",
+    "price": "$100",
+    "enrolled": 5000
+  },
+  {
+    "courseId": "C105",
+    "title": "Digital Marketing Essentials",
+    "instructor": "Liam O'Connor",
+    "duration": "12 hours",
+    "rating": 4.4,
+    "category": "Marketing",
+    "price": "$60",
+    "enrolled": 900
+  },
+  {
+    "courseId": "C106",
+    "title": "Machine Learning Concepts",
+    "instructor": "Chen Wei",
+    "duration": "18 hours",
+    "rating": 4.6,
+    "category": "Data Science",
+    "price": "$120",
+    "enrolled": 2200
+  }
+]
