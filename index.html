@@ -1,212 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Course Explorer</title>
 
-  <!-- Tailwind CDN  -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
     body {
-      font-family: "Inter", sans-serif;
+      background-color: #fdf7e3; /* light golden */
     }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
 
-  <!-- HEADER -->
-  <header class="bg-blue-600 text-white p-6 text-center shadow">
-    <h1 class="text-3xl font-semibold">📚 Course Explorer</h1>
-    <p class="text-sm mt-2">Browse, filter, sort, and register for courses</p>
-  </header>
+<body class="min-h-screen p-6">
 
-  <main class="max-w-5xl mx-auto mt-10 px-4">
+  <h1 class="text-3xl font-bold text-center mb-6">Course Explorer</h1>
 
-    <!-- FILTERS + SORT -->
-    <section class="mb-8 p-6 bg-white rounded-lg shadow">
-      <h2 class="text-xl font-semibold mb-4">Filters & Sorting</h2>
+  <!-- Search + Filter + Sort -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search courses..."
+      class="p-3 border rounded-lg w-full"
+/>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <!-- Category Filter -->
-        <select id="filterCategory" class="p-2 border rounded">
-          <option value="">All Categories</option>
-        </select>
+    <select id="categoryFilter" class="p-3 border rounded-lg w-full">
+      <option value="">All Categories</option>
+      <option value="Technology">Technology</option>
+      <option value="Business">Business</option>
+      <option value="Arts">Arts</option>
+      <option value="Science">Science</option>
+    </select>
 
-        <!-- Sort Select -->
-        <select id="sortBy" class="p-2 border rounded">
-          <option value="title">Sort by Title</option>
-          <option value="rating">Sort by Rating</option>
-          <option value="price">Sort by Price</option>
-        </select>
+    <select id="sortSelect" class="p-3 border rounded-lg w-full">
+      <option value="none">Sort By</option>
+      <option value="rating">Rating (High → Low)</option>
+      <option value="priceLow">Price (Low → High)</option>
+      <option value="priceHigh">Price (High → Low)</option>
+    </select>
+  </div>
 
-        <!-- Search -->
-        <input id="searchInput" type="text" placeholder="Search by title…" class="p-2 border rounded">
-      </div>
-    </section>
+  <!-- Courses Container -->
+  <div id="courseList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 
-    <!-- COURSES LIST -->
-    <section>
-      <h2 class="text-xl font-semibold mb-4">Available Courses</h2>
-
-      <div id="courseList" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
-
-      <!-- Pagination Buttons -->
-      <div class="mt-6 flex justify-center gap-4">
-        <button id="prevBtn" class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50">Prev</button>
-        <button id="nextBtn" class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50">Next</button>
-      </div>
-    </section>
-
-    <!-- SIGN-UP FORM -->
-    <section class="mt-12 p-6 bg-white shadow rounded-lg">
-      <h2 class="text-xl font-semibold mb-4">Register for a Course</h2>
-
-      <form id="signUpForm" class="grid grid-cols-1 gap-4">
-        
-        <input id="name" type="text" placeholder="Full Name" class="p-3 border rounded" required>
-
-        <input id="email" type="email" placeholder="Email Address" class="p-3 border rounded" required>
-
-        <select id="courseSelect" class="p-3 border rounded" required>
-          <option value="">Select Course</option>
-        </select>
-
-        <button class="p-3 bg-blue-600 text-white rounded text-lg hover:bg-blue-700">
-          Submit
-        </button>
-      </form>
-
-      <p id="formMessage" class="mt-4 font-semibold"></p>
-    </section>
-
-  </main>
-
-  <!-- JavaScript -->
   <script>
-    let courses = [];
-    let currentPage = 1;
-    const perPage = 2; // Show 2 per page
+    // ----------- REALISTIC COURSE DATA -----------
+    const courses = [
+      { title: "Python for Data Science", category: "Technology", rating: 4.8, price: 1500 },
+      { title: "Financial Markets 101", category: "Business", rating: 4.6, price: 1200 },
+      { title: "Digital Marketing Essentials", category: "Business", rating: 4.7, price: 1800 },
+      { title: "Introduction to Graphic Design", category: "Arts", rating: 4.5, price: 900 },
+      { title: "Machine Learning Foundations", category: "Science", rating: 4.9, price: 2000 },
+      { title: "Photography Masterclass", category: "Arts", rating: 4.4, price: 800 },
+      { title: "Web Development Bootcamp", category: "Technology", rating: 4.8, price: 1700 },
+      { title: "Behavioral Economics Basics", category: "Science", rating: 4.7, price: 1300 }
+    ];
 
-    // Fetch courses JSON
-    async function loadCourses() {
-      try {
-        const response = await fetch("courses.json"); // JSON must be in same folder
-        courses = await response.json();
+    let filteredCourses = [...courses];
 
-        populateCategories();
-        populateCourseDropdown();
-        renderCourses();
-
-      } catch (error) {
-        console.error("Error loading JSON:", error);
-      }
-    }
-
-    // Fill category filter dropdown
-    function populateCategories() {
-      const categories = [...new Set(courses.map(c => c.category))];
-      const select = document.getElementById("filterCategory");
-
-      categories.forEach(cat => {
-        const opt = document.createElement("option");
-        opt.value = cat;
-        opt.textContent = cat;
-        select.appendChild(opt);
-      });
-    }
-
-    // Fill sign-up course dropdown
-    function populateCourseDropdown() {
-      const dropdown = document.getElementById("courseSelect");
-      courses.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.title;
-        opt.textContent = c.title;
-        dropdown.appendChild(opt);
-      });
-    }
-
-    // Render paginated, filtered, sorted course list
+    // Render Courses
     function renderCourses() {
-      let list = [...courses];
-
-      // Filter by category
-      const category = document.getElementById("filterCategory").value;
-      if (category) list = list.filter(c => c.category === category);
-
-      // Search by title
-      const search = document.getElementById("searchInput").value.toLowerCase();
-      if (search) list = list.filter(c => c.title.toLowerCase().includes(search));
-
-      // Sort
-      const sort = document.getElementById("sortBy").value;
-      if (sort === "rating") list.sort((a, b) => b.rating - a.rating);
-      else if (sort === "price") list.sort((a, b) => parseFloat(a.price.slice(1)) - parseFloat(b.price.slice(1)));
-      else list.sort((a, b) => a.title.localeCompare(b.title));
-
-      // Pagination
-      const start = (currentPage - 1) * perPage;
-      const pageItems = list.slice(start, start + perPage);
-
       const container = document.getElementById("courseList");
       container.innerHTML = "";
 
-      pageItems.forEach(c => {
-        container.innerHTML += `
-          <div class="p-5 bg-white rounded-lg shadow">
-            <h3 class="text-lg font-semibold">${c.title}</h3>
-            <p class="text-sm text-gray-600">Instructor: ${c.instructor}</p>
-            <p>Duration: ${c.duration}</p>
-            <p>Rating: ⭐ ${c.rating}</p>
-            <p>Category: ${c.category}</p>
-            <p>Price: ${c.price}</p>
-            <p>Enrolled: ${c.enrolled}</p>
-          </div>
-        `;
-      });
-
-      document.getElementById("prevBtn").disabled = currentPage === 1;
-      document.getElementById("nextBtn").disabled = start + perPage >= list.length;
-    }
-
-    document.getElementById("prevBtn").onclick = () => {
-      currentPage--;
-      renderCourses();
-    };
-
-    document.getElementById("nextBtn").onclick = () => {
-      currentPage++;
-      renderCourses();
-    };
-
-    // Form validation + submit
-    document.getElementById("signUpForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const course = document.getElementById("courseSelect").value;
-
-      if (!name || !email || !course) {
-        document.getElementById("formMessage").textContent = "Please fill all fields.";
-        document.getElementById("formMessage").classList = "text-red-600";
+      if (filteredCourses.length === 0) {
+        container.innerHTML = `<p class="text-center text-gray-600">No courses found.</p>`;
         return;
       }
 
-      document.getElementById("formMessage").textContent =
-        "🎉 Successfully registered for " + course + "!";
-      document.getElementById("formMessage").classList = "text-green-600";
+      filteredCourses.forEach(course => {
+        container.innerHTML += `
+          <div class="p-4 bg-white rounded-lg shadow">
+            <h2 class="text-xl font-bold">${course.title}</h2>
+            <p class="text-gray-600">Category: ${course.category}</p>
+            <p class="text-gray-600">Rating: ⭐ ${course.rating}</p>
+            <p class="font-semibold mt-2">₹${course.price}</p>
+          </div>
+        `;
+      });
+    }
 
-      this.reset();
+    // Search Functionality
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const searchTerm = this.value.toLowerCase();
+      filteredCourses = courses.filter(course =>
+        course.title.toLowerCase().includes(searchTerm)
+      );
+      applyFiltersAndSort();
     });
 
-    // Run
-    loadCourses();
+    // Category Filter
+    document.getElementById("categoryFilter").addEventListener("change", function () {
+      applyFiltersAndSort();
+    });
+
+    // Sorting
+    document.getElementById("sortSelect").addEventListener("change", function () {
+      applyFiltersAndSort();
+    });
+
+    // Apply filter + search + sort
+    function applyFiltersAndSort() {
+      const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+      const category = document.getElementById("categoryFilter").value;
+      const sortType = document.getElementById("sortSelect").value;
+
+      // FILTER
+      filteredCourses = courses.filter(course => {
+        const matchesSearch = course.title.toLowerCase().includes(searchTerm);
+        const matchesCategory = category === "" || course.category === category;
+        return matchesSearch && matchesCategory;
+      });
+
+      // SORT
+      if (sortType === "rating") {
+        filteredCourses.sort((a, b) => b.rating - a.rating);
+      } else if (sortType === "priceLow") {
+        filteredCourses.sort((a, b) => a.price - b.price);
+      } else if (sortType === "priceHigh") {
+        filteredCourses.sort((a, b) => b.price - a.price);
+      }
+
+      renderCourses();
+    }
+
+    // Initial render
+    renderCourses();
   </script>
+
 </body>
 </html>
