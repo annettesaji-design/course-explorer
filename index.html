@@ -68,7 +68,6 @@
           </select>
           <div class="flex gap-2">
             <button type="submit" class="flex-1 py-2 rounded-md bg-sky-600 text-white">Register</button>
-            <button type="button" id="resetBtn" class="py-2 px-4 rounded-md border">Reset</button>
           </div>
         </div>
         <p id="signupMsg" class="small text-green-700 mt-3 hidden"></p>
@@ -290,9 +289,8 @@ document.getElementById('signup').addEventListener('submit', (ev)=>{
   msg.classList.remove('text-red-600');
   msg.classList.add('text-green-700');
   const course = courses.find(c=>c.courseId === courseId);
-  msg.textContent = `Thanks ${name.split(' ')[0]}! You are registered for "${course ? course.title : courseId}". (Demo)`;
+  msg.textContent = `Thanks ${name.split(' ')[0]}! You are registered for "${course ? course.title : courseId}".`;
 
-  document.getElementById('signup').reset();
 });
 
 /* ========= Start ========= */
