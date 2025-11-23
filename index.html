@@ -10,7 +10,7 @@
 
   <style>
     body {
-      background-color: #fdf7e3; /* Light golden */
+      background-color: #fdf7e3; /* Light golden background */
     }
   </style>
 </head>
@@ -21,12 +21,13 @@
 
   <!-- Search + Filter + Sort -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    
     <input
       id="searchInput"
       type="text"
       placeholder="Search courses..."
       class="p-3 border rounded-lg w-full"
-/>
+    />
 
     <select id="categoryFilter" class="p-3 border rounded-lg w-full">
       <option value="">All Categories</option>
@@ -42,50 +43,72 @@
       <option value="priceLow">Price (Low → High)</option>
       <option value="priceHigh">Price (High → Low)</option>
     </select>
+
   </div>
 
-  <!-- ⭐ FORM (Added Back) -->
-  <div class="mb-10 bg-white p-6 rounded-xl shadow">
-    <h2 class="text-xl font-semibold mb-4">Add a Course Category</h2>
+  <!-- Course List -->
+  <div id="courseList" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10"></div>
 
-    <form id="categoryForm" class="flex flex-col md:flex-row gap-4">
+
+  <!-- ⭐ Registration Form at Bottom ⭐ -->
+  <div class="bg-white p-6 rounded-xl shadow max-w-xl mx-auto mt-10">
+    <h2 class="text-xl font-bold mb-4 text-center">Course Registration</h2>
+
+    <form id="signupForm" class="space-y-4">
+
       <input
-        id="categoryInput"
+        id="nameInput"
         type="text"
-        placeholder="Enter a category (e.g., Technology)"
-        class="p-3 border rounded-lg flex-1"
+        placeholder="Your Name"
+        class="p-3 border rounded-lg w-full"
+        required
+      />
+
+      <input
+        id="emailInput"
+        type="email"
+        placeholder="Email Address"
+        class="p-3 border rounded-lg w-full"
+        required
+      />
+
+      <input
+        id="courseNameInput"
+        type="text"
+        placeholder="Course Name"
+        class="p-3 border rounded-lg w-full"
+        required
       />
 
       <button
         type="submit"
-        class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+        class="bg-green-600 text-white px-6 py-3 rounded-lg w-full hover:bg-green-700"
       >
-        Submit
+        Register
       </button>
+
     </form>
 
-    <p id="formMessage" class="mt-3 text-green-700 font-medium hidden">
-      Category added successfully!
+    <p id="successMessage" class="text-green-700 font-medium text-center mt-4 hidden">
+      Registration successful!
     </p>
   </div>
 
-  <!-- Courses Container -->
-  <div id="courseList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-
   <script>
-    // ----------- REALISTIC COURSE DATA -----------
-    const courses = [
-      { title: "Python for Data Science", category: "Technology", rating: 4.8, price: 1500 },
-      { title: "Financial Markets 101", category: "Business", rating: 4.6, price: 1200 },
-      { title: "Digital Marketing Essentials", category: "Business", rating: 4.7, price: 1800 },
-      { title: "Introduction to Graphic Design", category: "Arts", rating: 4.5, price: 900 },
-      { title: "Machine Learning Foundations", category: "Science", rating: 4.9, price: 2000 },
-      { title: "Photography Masterclass", category: "Arts", rating: 4.4, price: 800 },
-      { title: "Web Development Bootcamp", category: "Technology", rating: 4.8, price: 1700 },
-      { title: "Behavioral Economics Basics", category: "Science", rating: 4.7, price: 1300 }
-    ];
+    let courses = [];
+    let filteredCourses = [];
 
-    let filteredCourses = [...courses];
+    // ------------ FETCH JSON DATA ------------
+    fetch("courses.json")
+      .then(response => response.json())
+      .then(data => {
+        courses = data;
+        filteredCourses = [...courses];
+        renderCourses();
+      })
+      .catch(error => {
+        console.error("Error loading JSON:", error);
+      });
 
     // ------------ RENDER COURSES ------------
     function renderCourses() {
@@ -109,19 +132,9 @@
       });
     }
 
-    // ------------ SEARCH ------------
-    document.getElementById("searchInput").addEventListener("input", function () {
-      const searchTerm = this.value.toLowerCase();
-      filteredCourses = courses.filter(course =>
-        course.title.toLowerCase().includes(searchTerm)
-      );
-      applyFiltersAndSort();
-    });
-
-    // ------------ FILTER ------------
+    // ------------ SEARCH, FILTER, SORT ------------
+    document.getElementById("searchInput").addEventListener("input", applyFiltersAndSort);
     document.getElementById("categoryFilter").addEventListener("change", applyFiltersAndSort);
-
-    // ------------ SORT ------------
     document.getElementById("sortSelect").addEventListener("change", applyFiltersAndSort);
 
     function applyFiltersAndSort() {
@@ -147,24 +160,12 @@
     }
 
     // ------------ FORM FUNCTIONALITY ------------
-    document.getElementById("categoryForm").addEventListener("submit", function (e) {
+    document.getElementById("signupForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const newCategory = document.getElementById("categoryInput").value.trim();
-
-      if (newCategory === "") return;
-
-      // Show success message
-      const msg = document.getElementById("formMessage");
-      msg.classList.remove("hidden");
-      msg.textContent = `Category "${newCategory}" submitted!`;
-
-      // Clear field
-      document.getElementById("categoryInput").value = "";
+      document.getElementById("successMessage").classList.remove("hidden");
+      this.reset();
     });
-
-    // Initial render
-    renderCourses();
   </script>
 
 </body>
