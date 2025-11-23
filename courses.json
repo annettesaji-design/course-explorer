@@ -6,7 +6,7 @@
     "duration": "10 hours",
     "rating": 4.5,
     "category": "Web Development",
-    "price": "$50",
+    "price": "Rs. 5000",
     "enrolled": "2500"
   },
   {
@@ -16,7 +16,7 @@
     "duration": "15 hours",
     "rating": 4.7,
     "category": "Data Science",
-    "price": "$80",
+    "price": "Rs. 8000",
     "enrolled": "1800"
   },
   {
@@ -26,7 +26,7 @@
     "duration": "8 hours",
     "rating": 4.3,
     "category": "Design",
-    "price": "$45",
+    "price": "Rs. 4500",
     "enrolled": "1200"
   },
   {
@@ -36,7 +36,7 @@
     "duration": "20 hours",
     "rating": 4.8,
     "category": "Programming",
-    "price": "$100",
+    "price": "Rs. 1000",
     "enrolled": "5000"
   },
   {
@@ -46,7 +46,7 @@
     "duration": "12 hours",
     "rating": 4.4,
     "category": "Marketing",
-    "price": "$60",
+    "price": "$Rs. 6000",
     "enrolled": "900"
   },
   {
@@ -56,7 +56,7 @@
     "duration": "18 hours",
     "rating": 4.6,
     "category": "Data Science",
-    "price": "$120",
+    "price": "Rs. 1200",
     "enrolled": "2200"
   }
 ]
