@@ -1,62 +1,38 @@
 [
   {
-    "courseId": "C101",
-    "title": "Full-Stack Web Development Bootcamp",
-    "instructor": "Angela Yu",
-    "duration": "42 hours",
+    "title": "Python for Data Science",
+    "category": "Technology",
     "rating": 4.8,
-    "category": "Web Development",
-    "price": "$79",
-    "enrolled": "35000"
+    "price": 1500
   },
   {
-    "courseId": "C102",
-    "title": "Data Science & Machine Learning with Python",
-    "instructor": "Jose Portilla",
-    "duration": "36 hours",
-    "rating": 4.7,
-    "category": "Data Science",
-    "price": "$59",
-    "enrolled": "41000"
-  },
-  {
-    "courseId": "C103",
-    "title": "Digital Marketing Masterclass 2025",
-    "instructor": "Rob Percival",
-    "duration": "18 hours",
-    "rating": 4.5,
-    "category": "Marketing",
-    "price": "$49",
-    "enrolled": "22000"
-  },
-  {
-    "courseId": "C104",
-    "title": "Business Analytics for Decision Making",
-    "instructor": "Andrew Ng",
-    "duration": "12 hours",
-    "rating": 4.6,
+    "title": "Financial Markets 101",
     "category": "Business",
-    "price": "$45",
-    "enrolled": "18000"
+    "rating": 4.6,
+    "price": 1200
   },
   {
-    "courseId": "C105",
-    "title": "UI/UX Design Essentials: Figma to Prototype",
-    "instructor": "Daniel Walter Scott",
-    "duration": "20 hours",
+    "title": "Digital Marketing Essentials",
+    "category": "Business",
     "rating": 4.7,
-    "category": "Design",
-    "price": "$55",
-    "enrolled": "27000"
+    "price": 1800
   },
   {
-    "courseId": "C106",
-    "title": "Cloud Computing with AWS — Complete Guide",
-    "instructor": "Stephane Maarek",
-    "duration": "28 hours",
-    "rating": 4.8,
-    "category": "Cloud Computing",
-    "price": "$89",
-    "enrolled": "39000"
+    "title": "Introduction to Graphic Design",
+    "category": "Arts",
+    "rating": 4.5,
+    "price": 900
+  },
+  {
+    "title": "Machine Learning Foundations",
+    "category": "Science",
+    "rating": 4.9,
+    "price": 2000
+  },
+  {
+    "title": "Photography Masterclass",
+    "category": "Arts",
+    "rating": 4.4,
+    "price": 800
   }
 ]
